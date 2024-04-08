@@ -13,11 +13,11 @@ def item_list(request):
                 {
                     'id': item.pk,
                     'name': item.name,
-                    'store': item.store,
+                    'store': item.store.name,
                     'count': item.count,
                     'price': item.price,
-                    'image': item.image
+                    'image': request.build_absolute_uri(item.image.url)
                 }
             )
         
-        return JsonResponse(data)
+        return JsonResponse(data=data, safe=False)
