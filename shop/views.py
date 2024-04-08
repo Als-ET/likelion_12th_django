@@ -21,7 +21,7 @@ def item_list(request):
                 }
             )
         
-        return JsonResponse(data=data, safe=False)
+        return JsonResponse(data=data, safe=False, status=200)
     
     if request.method == 'POST':
         item = Item()
@@ -38,7 +38,7 @@ def item_list(request):
             raise Http404('store does not exist') 
         item.save()
 
-        return JsonResponse({"success":"item has been saved"})
+        return JsonResponse({"success":"item has been saved"}, status=201)
 
 @csrf_exempt
 def item(request, pk):
@@ -57,7 +57,7 @@ def item(request, pk):
             'image': request.build_absolute_uri(item.image.url)
         }
 
-        return JsonResponse(data=data, safe=False)
+        return JsonResponse(data=data, safe=False, status=200)
     
     if request.method == 'DELETE':
         try:
@@ -67,4 +67,4 @@ def item(request, pk):
         
         item.delete()
 
-        return JsonResponse({"success":"item has been deleted"})
+        return JsonResponse(data={"success":"item has been deleted"}, status=204)
