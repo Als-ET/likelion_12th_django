@@ -41,6 +41,7 @@ def item_list(request):
 
         return JsonResponse({"success":"item has been saved"})
 
+@csrf_exempt
 def item(request, pk):
     if request.method == 'GET':
         try:
@@ -58,3 +59,13 @@ def item(request, pk):
         }
 
         return JsonResponse(data=data, safe=False)
+    
+    if request.method == 'DELETE':
+        try:
+            item = Item.objects.get(pk=pk)
+        except Item.DoesNotExist:
+            raise Http404('item does not exist')
+        
+        item.delete()
+
+        return JsonResponse({"success":"item has been deleted"})
