@@ -3,7 +3,6 @@ from django.http import JsonResponse, HttpResponse, Http404
 from .models import Item, Store
 from django.views.decorators.csrf import csrf_exempt
 
-# 전체 상품 리스트 반환
 @csrf_exempt
 def item_list(request):
     if request.method == 'GET':
