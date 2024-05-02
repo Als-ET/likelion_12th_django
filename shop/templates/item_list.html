@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item List</title>
+    <style>
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            display: inline-block;
+            width: 300px;
+            /* 아이템의 가로 크기 */
+            margin: 10px;
+            vertical-align: top;
+        }
+
+        .item-info {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .item-info img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Item List</h1>
+    <ul>
+        {% for item in object_list %}
+        <li>
+            <div class="item-info">
+                <img src="{{ item.image.url }}" alt="Item Image">
+                <p><strong>ID:</strong> {{ item.pk }}</p>
+                <p><strong>Name:</strong> {{ item.name }}</p>
+                <p><strong>Store:</strong> {{ item.store.name }}</p>
+                <p><strong>Count:</strong> {{ item.count }}</p>
+                <p><strong>Price:</strong> {{ item.price }}</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>

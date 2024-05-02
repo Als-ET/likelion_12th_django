@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse, Http404
+from django.http import JsonResponse, Http404
 from .models import Item, Store
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import ListView
+from django.shortcuts import render
 
 @csrf_exempt
 def item_list(request):
@@ -24,6 +25,7 @@ def item_list(request):
         return JsonResponse(data=data, safe=False, status=200)
     
     if request.method == 'POST':
+
         item = Item()
         item.name = request.POST['name']
         item.price = request.POST['price']
@@ -68,3 +70,14 @@ def item(request, pk):
         item.delete()
 
         return JsonResponse(data={"success":"item has been deleted"}, status=204)
+    
+
+
+# CBV와 FBV
+def item_list_fbv(request):
+    items = Item.objects.all()
+    return render(request, 'item_list.html', {'object_list': items})
+
+class ItemListView(ListView):
+    model=Item
+    template_name='item_list.html'
