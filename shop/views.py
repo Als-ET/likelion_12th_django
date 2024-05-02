@@ -81,3 +81,24 @@ def item_list_fbv(request):
 class ItemListView(ListView):
     model=Item
     template_name='item_list.html'
+
+# 쇼핑몰 기능 구현
+
+# 상점 리스트
+def store_list(request):
+    stores = Store.objects.all()
+    data = []
+
+    for store in stores:
+        items = Item.objects.filter(store=store)
+        item_count = items.count()
+        data.append(
+            {
+                'id': store.pk,
+                'name': store.name,
+                'address': store.address,
+                'item_count': item_count
+            }
+        )
+
+    return JsonResponse(data=data, safe=False, status=200)
