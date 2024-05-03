@@ -9,4 +9,5 @@ urlpatterns = [
 
     path('store_list/', views.store_list, name='store_list'),
     path('store_item_list/<int:store_pk>', views.store_item_list, name='store_item_list'),
+    path('search_item/', views.search_item, name='search_item'),
 ]
