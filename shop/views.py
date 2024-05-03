@@ -117,6 +117,8 @@ def store_item_list(request, store_pk):
         items = Item.objects.filter(store=store).order_by('price')
     elif sort_criteria == 'name':
         items = Item.objects.filter(store=store).order_by('name')
+    else :
+        items = Item.objects.filter(store=store)
     
     data = []
 
