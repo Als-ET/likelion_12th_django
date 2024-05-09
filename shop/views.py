@@ -101,7 +101,12 @@ def store_list(request):
             }
         )
 
-    return JsonResponse(data=data, safe=False, status=200)
+    context = {
+        'stores': data
+    }
+
+    return render(request, 'index.html', context)
+
 
 # 상점별 아이템 리스트
 def store_item_list(request, store_pk):
