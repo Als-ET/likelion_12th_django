@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Page Title{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        li {
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out;
+            width: 280px;
+            margin: 10px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .item-info {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-info img {
+            width: 100%;
+            height: 200px; /* Set a fixed height for better alignment */
+            object-fit: cover; /* Ensure the image covers the area without distortion */
+            border-bottom: 4px solid #0056b3; /* A blue accent border under the image */
+        }
+
+        .item-info p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .item-info p strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    {% block content %}
+    <!-- Content goes here -->
+    {% endblock %}
+</body>
+</html>

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Item Detail{% endblock %}
+
+{% block content %}
+    <h1>Item Detail</h1>
+    <ul>
+        <li>
+            <div class="item-info">
+                <img src="{{ item.image.url }}" alt="Item Image">
+                <p><strong>ID:</strong> {{ item.pk }}</p>
+                <p><strong>Name:</strong> {{ item.name }}</p>
+                <p><strong>Store:</strong> {{ item.store.name }}</p>
+                <p><strong>Count:</strong> {{ item.count }}</p>
+                <p><strong>Price:</strong> {{ item.price }}</p>
+            </div>
+        </li>
+    </ul>
+{% endblock %}

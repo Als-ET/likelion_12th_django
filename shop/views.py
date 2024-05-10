@@ -2,27 +2,19 @@ from django.http import JsonResponse, Http404
 from .models import Item, Store
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from .forms import ItemForm, ItemModelForm
 
 @csrf_exempt
 def item_list(request):
     if request.method == 'GET':
         items = Item.objects.all()
-        data = []
-
-        for item in items:
-            data.append(
-                {
-                    'id': item.pk,
-                    'name': item.name,
-                    'store': item.store.name,
-                    'count': item.count,
-                    'price': item.price,
-                    'image': request.build_absolute_uri(item.image.url)
-                }
-            )
         
-        return JsonResponse(data=data, safe=False, status=200)
+        context = {
+            'items': items
+        }
+        
+        return render(request, 'item_list.html', context)
     
     if request.method == 'POST':
 
@@ -50,16 +42,11 @@ def item(request, pk):
         except Item.DoesNotExist:
             raise Http404('item does not exist') 
         
-        data = {
-            'id': item.pk,
-            'name': item.name,
-            'store': item.store.name,
-            'count': item.count,
-            'price': item.price,
-            'image': request.build_absolute_uri(item.image.url)
+        context = {
+            'item': item
         }
-
-        return JsonResponse(data=data, safe=False, status=200)
+        
+        return render(request, 'item_detail.html', context)
     
     if request.method == 'DELETE':
         try:
@@ -76,7 +63,7 @@ def item(request, pk):
 # CBV와 FBV
 def item_list_fbv(request):
     items = Item.objects.all()
-    return render(request, 'item_list.html', {'object_list': items})
+    return render(request, 'item_list.html', {'items': items})
 
 class ItemListView(ListView):
     model=Item
@@ -101,12 +88,7 @@ def store_list(request):
             }
         )
 
-    context = {
-        'stores': data
-    }
-
-    return render(request, 'index.html', context)
-
+    return JsonResponse(data=data, safe=False, status=200)
 
 # 상점별 아이템 리스트
 def store_item_list(request, store_pk):
@@ -162,3 +144,46 @@ def search_item(request):
         )
 
     return JsonResponse(data=data, safe=False, status=200)
+
+
+# html form 을 이용해 쇼핑 아이템(Item) 객체 만들기
+def create(request):
+    if(request.method == 'POST'):
+        item = Item()
+        item.name = request.POST['name']
+        
+        store_name = request.POST['store']
+        item.store = get_object_or_404(Store, name=store_name)
+        item.count = request.POST['count']
+        item.price = request.POST['price']
+        item.save()
+    return render(request, 'create.html')
+
+# django form을 이용해 쇼핑 아이템(Item) 객체 만들기
+def formcreate(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            item = Item()
+            item.name = form.cleaned_data['name']
+            item.price = form.cleaned_data['price']
+            item.count = form.cleaned_data['count']
+            store_name = form.cleaned_data['store']
+            item.store = get_object_or_404(Store, name=store_name)
+            item.image = form.cleaned_data['image']
+            item.save()
+            return redirect('item_list')
+    else:
+        form = ItemForm()
+    return render(request, 'form_create.html', {'form':form})
+
+# django modelform을 이용해 쇼핑 아이템(Item) 객체 만들기
+def modelformcreate(request):
+    if request.method == 'POST':
+        form = ItemModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('item_list')
+    else:
+        form = ItemModelForm()
+    return render(request, 'form_create.html', {'form':form})
